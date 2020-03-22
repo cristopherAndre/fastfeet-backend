@@ -105,5 +105,12 @@ O cadastro de destinatários só pode ser feito por administradores autenticados
 
 O destinatário não pode se autenticar no sistema, ou seja, não possui senha.
 
+## 3. Iniciando aplicação
+
+    yarn
+    yarn sequelize db:migrate
+    yarn sequelize db:seed:all
+    yarn dev
+
 ---
 
