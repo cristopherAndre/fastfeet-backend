@@ -14,6 +14,8 @@ routes.put('/users', UserController.update);
 routes.get('/users/:id', UserController.get);
 
 routes.post('/recipients', RecipientController.store);
-routes.get('/recipients/:id', RecipientController.get);
+routes.get('/recipients/:id', RecipientController.show);
+routes.put('/recipients/:id', RecipientController.update);
+routes.delete('/recipients/:id', RecipientController.destroy);
 
 export default routes;
