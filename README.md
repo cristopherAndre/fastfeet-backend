@@ -10,7 +10,7 @@
   :warning: Desafio Final :warning:
 </h3>
 
-<p>Esse desafio faz parte do Desafio Final, que é uma aplicação completa (Back-end, Front-end e Mobile) que é avaliada para emissão do Certificado do Bootcamp GoStack, por isso é fundamental que ele seja feito com muito empenho!</p>
+<p>Esse desafio faz parte do Desafio Final, que é uma aplicação completa (Back-end, Front-end e Mobile) que é avaliada para emissão do Certificado do Bootcamp GoStack.</p>
 
 
 ### **Um pouco sobre as ferramentas**
@@ -22,11 +22,8 @@ Você deverá criar a aplicação do zero utilizando o [Express](https://expres
 - Sequelize (Utilize PostgreSQL ou MySQL);
 
 ### Ajuda
-<ul>
-    <li>
-        Crie uma instância do Postgress com o Docker:
-    </li>
-</ul>
+
+Instale o Docker e crie uma instância do Postgress com o seguinte comando:
 
     docker run --name database -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
 
