@@ -2,6 +2,8 @@ import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
+import NewDeliveryMail from '../jobs/NewDeliveryMail';
+import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
@@ -50,8 +52,11 @@ class DeliveryController {
     if (!deliveryman) {
       return res.status(400).json({ error: 'Deliveryman doesnt exists' });
     }
+    const delivery = await Delivery.create(req.body);
 
-    return res.json(await Delivery.create(req.body));
+    Queue.add(NewDeliveryMail.key, { deliveryman, product: delivery.product });
+
+    return res.json(delivery);
   }
 
   async update(req, res) {
