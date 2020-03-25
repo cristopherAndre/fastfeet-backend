@@ -18,9 +18,14 @@ class PickupDeliveryController {
       return res.status(400).json({ error: 'Delivery doesnt exists' });
     }
 
-    // Check if delivery is started already
+    // Check if delivery is already started
     if (delivery.start_date !== null) {
       return res.status(400).json({ error: 'Delivery already started' });
+    }
+
+    // Check if delivery is canceled
+    if (delivery.canceled_at !== null) {
+      res.status(401).json({ error: 'Delivery canceled.' });
     }
 
     const currentDate = new Date();

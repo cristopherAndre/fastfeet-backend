@@ -49,7 +49,7 @@ routes.delete('/deliveries/:id', DeliveryController.delete);
 
 // Pickup Delivery
 routes.put(
-  '/deliveryman/:deliverymanId/delivery/:deliveryId',
+  '/deliveryman/:deliverymanId/delivery/:deliveryId/pickup',
   PickupDeliveryController.update
 );
 
