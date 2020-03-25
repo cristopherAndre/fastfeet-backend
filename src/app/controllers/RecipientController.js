@@ -2,6 +2,15 @@ import * as Yup from 'yup';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
+  async index(req, res) {
+    const { page = 1 } = req.query;
+    const recipients = await Recipient.findAll({
+      limit: 20,
+      offset: (page - 1) * 20,
+    });
+    return res.json(recipients);
+  }
+
   async show(req, res) {
     const schema = Yup.object().shape({
       id: Yup.number()

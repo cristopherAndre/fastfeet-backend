@@ -1,16 +1,10 @@
 import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
-import User from '../models/User';
+import Deliveryman from '../models/Deliveryman';
+import Recipient from '../models/Recipient';
 
 class DeliveryController {
   async index(req, res) {
-    // Check if user is admin
-    const user = await User.findByPk(req.userId);
-    if (!user.admin)
-      return res
-        .status(401)
-        .json({ error: 'Current user is not administrator!' });
-
     const { page = 1 } = req.query;
     const deliveries = await Delivery.findAll({
       limit: 20,
@@ -20,13 +14,6 @@ class DeliveryController {
   }
 
   async show(req, res) {
-    // Check if user is admin
-    const user = await User.findByPk(req.userId);
-    if (!user.admin)
-      return res
-        .status(401)
-        .json({ error: 'Current user is not administrator!' });
-
     const delivery = await Delivery.findByPk(req.params.id);
     if (!delivery) {
       return res.status(400).json({ error: 'Delivery not found' });
@@ -35,59 +22,59 @@ class DeliveryController {
   }
 
   async store(req, res) {
-    // Check if user is admin
-    const user = await User.findByPk(req.userId);
-    if (!user.admin)
-      return res
-        .status(401)
-        .json({ error: 'Current user is not administrator!' });
-
     // Run field validations
     const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
+      recipient_id: Yup.number().required(),
+      deliveryman_id: Yup.number().required(),
+      product: Yup.string().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
-      res.status(400).json({ error: 'Validation Fails' });
+      return res.status(400).json({ error: 'Validations fails' });
     }
 
-    return res.json();
+    const { recipient_id, deliveryman_id } = req.body;
+
+    // Check if Recipent exists
+    const recipient = await Recipient.findByPk(recipient_id, {
+      attributes: ['name'],
+    });
+    if (!recipient) {
+      return res.status(400).json({ error: 'Recipient doesnt exists' });
+    }
+
+    // Check if Deliveryman exists
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id, {
+      attributes: ['name', 'email'],
+    });
+    if (!deliveryman) {
+      return res.status(400).json({ error: 'Deliveryman doesnt exists' });
+    }
+
+    return res.json(await Delivery.create(req.body));
   }
 
   async update(req, res) {
-    // Check if user is admin
-    const user = await User.findByPk(req.userId);
-    if (!user.admin)
-      return res
-        .status(401)
-        .json({ error: 'Current user is not administrator!' });
-
     // Run field validations
     const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
+      recipient_id: Yup.number().required(),
+      deliveryman_id: Yup.number().required(),
+      product: Yup.string().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
-      res.status(400).json({ error: 'Validation Fails' });
+      return res.status(400).json({ error: 'Validations fails' });
     }
 
-    return res.json();
+    const delivery = await Delivery.findByPk(req.params.id);
+    if (!delivery) {
+      return res.status(400).json({ error: 'Delivery not found' });
+    }
+
+    return res.json(await delivery.update(req.body));
   }
 
   async delete(req, res) {
-    // Check if user is admin
-    const user = await User.findByPk(req.userId);
-    if (!user.admin)
-      return res
-        .status(401)
-        .json({ error: 'Current user is not administrator!' });
-
     const delivery = await Delivery.findByPk(req.params.id);
     if (!delivery) {
       return res.status(400).json({ error: 'Delivery not found' });
