@@ -7,6 +7,8 @@ import RecipientController from './app/controllers/RecipientController';
 import FileController from './app/controllers/FileController';
 import DeliverymanController from './app/controllers/DeliverymanController';
 import DeliveryController from './app/controllers/DeliveryController';
+import PickupDeliveryController from './app/controllers/PickupDeliveryController';
+import DropDeliveryController from './app/controllers/DropDeliveryController';
 import authMiddleware from './app/middlewares/auth';
 import checkIsAdminUserMiddleware from './app/middlewares/checkIsAdminUser';
 
@@ -31,18 +33,30 @@ routes.delete('/recipients/:id', RecipientController.destroy);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
-// Deliveryman
-routes.get('/deliveryman', DeliverymanController.index);
-routes.get('/deliveryman/:id', DeliverymanController.show);
-routes.post('/deliveryman', DeliverymanController.store);
-routes.put('/deliveryman/:id', DeliverymanController.update);
-routes.delete('/deliveryman/:id', DeliverymanController.delete);
+// Deliverymen
+routes.get('/deliverymen', DeliverymanController.index);
+routes.get('/deliverymen/:id', DeliverymanController.show);
+routes.post('/deliverymen', DeliverymanController.store);
+routes.put('/deliverymen/:id', DeliverymanController.update);
+routes.delete('/deliverymen/:id', DeliverymanController.delete);
 
-// Delivery
-routes.get('/delivery', DeliveryController.index);
-routes.get('/delivery/:id', DeliveryController.show);
-routes.post('/delivery', DeliveryController.store);
-routes.put('/delivery/:id', DeliveryController.update);
-routes.delete('/delivery/:id', DeliveryController.delete);
+// Deliveries
+routes.get('/deliveries', DeliveryController.index);
+routes.get('/deliveries/:id', DeliveryController.show);
+routes.post('/deliveries', DeliveryController.store);
+routes.put('/deliveries/:id', DeliveryController.update);
+routes.delete('/deliveries/:id', DeliveryController.delete);
+
+// Pickup Delivery
+routes.put(
+  '/deliveryman/:deliverymanId/delivery/:deliveryId',
+  PickupDeliveryController.update
+);
+
+// Drop Delivery
+routes.put(
+  '/deliveryman/:deliverymanId/delivery/:deliveryId/drop',
+  DropDeliveryController.update
+);
 
 export default routes;

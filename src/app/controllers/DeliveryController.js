@@ -54,7 +54,11 @@ class DeliveryController {
     }
     const delivery = await Delivery.create(req.body);
 
-    Queue.add(NewDeliveryMail.key, { deliveryman, product: delivery.product });
+    Queue.add(NewDeliveryMail.key, {
+      deliveryman,
+      recipient,
+      product: delivery.product,
+    });
 
     return res.json(delivery);
   }
