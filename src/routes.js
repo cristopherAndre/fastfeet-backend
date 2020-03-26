@@ -11,6 +11,7 @@ import PickupDeliveryController from './app/controllers/PickupDeliveryController
 import DropDeliveryController from './app/controllers/DropDeliveryController';
 import DeliverymanPendingController from './app/controllers/DeliverymanPendingController';
 import DeliverymanDeliveredController from './app/controllers/DeliverymanDeliveredController';
+import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 import authMiddleware from './app/middlewares/auth';
 import checkIsAdminUserMiddleware from './app/middlewares/checkIsAdminUser';
 
@@ -21,6 +22,40 @@ routes.post('/sessions', SessionController.store);
 routes.post('/users', UserController.store);
 
 routes.use(authMiddleware);
+
+// Pickup Delivery
+routes.put(
+  '/deliveryman/:deliverymanId/delivery/:deliveryId/pickup',
+  PickupDeliveryController.update
+);
+
+// Drop Delivery
+routes.put(
+  '/deliveryman/:deliverymanId/delivery/:deliveryId/drop',
+  DropDeliveryController.update
+);
+
+// Deliveryman Pending Deliveries
+routes.get(
+  '/deliveryman/:deliverymanId/pending',
+  DeliverymanPendingController.index
+);
+
+// Deliveryman Delivered Deliveries
+routes.get(
+  '/deliveryman/:deliverymanId/delivered',
+  DeliverymanDeliveredController.index
+);
+
+// Delivery problems
+routes.post('/delivery/:deliveryId/problems', DeliveryProblemController.store);
+routes.get('/delivery/problems', DeliveryProblemController.index);
+routes.get('/delivery/:deliveryId/problems', DeliveryProblemController.show);
+routes.delete(
+  '/problem/:problemId/cancel-delivery',
+  DeliveryProblemController.delete
+);
+
 routes.use(checkIsAdminUserMiddleware);
 
 routes.put('/users', UserController.update);
@@ -48,29 +83,5 @@ routes.get('/deliveries/:id', DeliveryController.show);
 routes.post('/deliveries', DeliveryController.store);
 routes.put('/deliveries/:id', DeliveryController.update);
 routes.delete('/deliveries/:id', DeliveryController.delete);
-
-// Pickup Delivery
-routes.put(
-  '/deliveryman/:deliverymanId/delivery/:deliveryId/pickup',
-  PickupDeliveryController.update
-);
-
-// Drop Delivery
-routes.put(
-  '/deliveryman/:deliverymanId/delivery/:deliveryId/drop',
-  DropDeliveryController.update
-);
-
-// Deliveryman Pending Deliveries
-routes.get(
-  '/deliveryman/:deliverymanId/pending',
-  DeliverymanPendingController.index
-);
-
-// Deliveryman Delivered Deliveries
-routes.get(
-  '/deliveryman/:deliverymanId/delivered',
-  DeliverymanDeliveredController.index
-);
 
 export default routes;
