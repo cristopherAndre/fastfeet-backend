@@ -1,5 +1,6 @@
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
+import File from '../models/File';
 
 class DropDeliveryController {
   async update(req, res) {
@@ -32,8 +33,16 @@ class DropDeliveryController {
       res.status(401).json({ error: 'Delivery canceled.' });
     }
 
+    // Check if File exists
+    const { signature_id } = req.body;
+    const signature = await File.findByPk(signature_id);
+
+    if (!signature) {
+      return res.status(400).json({ error: 'Signature does not exists' });
+    }
+
     const currentDate = new Date();
-    await delivery.update({ end_date: currentDate });
+    await delivery.update({ end_date: currentDate, signature_id });
     return res.status(200).json();
   }
 }
