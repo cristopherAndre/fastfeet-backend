@@ -9,6 +9,8 @@ import DeliverymanController from './app/controllers/DeliverymanController';
 import DeliveryController from './app/controllers/DeliveryController';
 import PickupDeliveryController from './app/controllers/PickupDeliveryController';
 import DropDeliveryController from './app/controllers/DropDeliveryController';
+import DeliverymanPendingController from './app/controllers/DeliverymanPendingController';
+import DeliverymanDeliveredController from './app/controllers/DeliverymanDeliveredController';
 import authMiddleware from './app/middlewares/auth';
 import checkIsAdminUserMiddleware from './app/middlewares/checkIsAdminUser';
 
@@ -57,6 +59,18 @@ routes.put(
 routes.put(
   '/deliveryman/:deliverymanId/delivery/:deliveryId/drop',
   DropDeliveryController.update
+);
+
+// Deliveryman Pending Deliveries
+routes.get(
+  '/deliveryman/:deliverymanId/pending',
+  DeliverymanPendingController.index
+);
+
+// Deliveryman Delivered Deliveries
+routes.get(
+  '/deliveryman/:deliverymanId/delivered',
+  DeliverymanDeliveredController.index
 );
 
 export default routes;
