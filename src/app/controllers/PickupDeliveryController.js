@@ -1,4 +1,5 @@
-import { isAfter, isBefore, setHours } from 'date-fns';
+import { Op } from 'sequelize';
+import { isAfter, isBefore, setHours, startOfDay, endOfDay } from 'date-fns';
 import Properties from '../../config/properties';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
@@ -6,11 +7,27 @@ import Deliveryman from '../models/Deliveryman';
 class PickupDeliveryController {
   async update(req, res) {
     const { deliverymanId, deliveryId } = req.params;
+    const currentDate = new Date();
 
     // Check if Deliveryman exists
     const deliveryman = await Deliveryman.findByPk(deliverymanId);
     if (!deliveryman) {
       return res.status(400).json({ error: 'Deliveryman doesnt exists' });
+    }
+
+    // Deliveryman can only pickup 5 deliveris per day
+    const countPickupedDeliveries = await Delivery.count({
+      where: {
+        deliveryman_id: deliverymanId,
+        start_date: {
+          [Op.between]: [startOfDay(currentDate), endOfDay(currentDate)],
+        },
+      },
+    });
+    if (countPickupedDeliveries >= 5) {
+      return res.status(400).json({
+        error: 'You can only pickup 5 deliveries per day',
+      });
     }
 
     // Check if delivery exists
@@ -28,8 +45,6 @@ class PickupDeliveryController {
     if (delivery.canceled_at !== null) {
       res.status(401).json({ error: 'Delivery canceled.' });
     }
-
-    const currentDate = new Date();
 
     // Get properties from app.properties file
     const startPickup = Number(Properties.props.get('delivery.start.pickup'));
