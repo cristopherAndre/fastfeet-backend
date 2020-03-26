@@ -1,4 +1,5 @@
 import { isAfter, isBefore, setHours } from 'date-fns';
+import Properties from '../../config/properties';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
 
@@ -30,9 +31,13 @@ class PickupDeliveryController {
 
     const currentDate = new Date();
 
+    // Get properties from app.properties file
+    const startPickup = Number(Properties.props.get('delivery.start.pickup'));
+    const endPickup = Number(Properties.props.get('delivery.end.pickup'));
+
     if (
-      isBefore(currentDate, setHours(new Date(), 8)) ||
-      isAfter(currentDate, setHours(new Date(), 22))
+      isBefore(currentDate, setHours(new Date(), startPickup)) ||
+      isAfter(currentDate, setHours(new Date(), endPickup))
     ) {
       return res.status(400).json({
         error: 'You can only pickup a delivery between 8:00h and 18:00h.',
