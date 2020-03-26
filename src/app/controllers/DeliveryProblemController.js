@@ -112,7 +112,7 @@ class DeliveryProblemController {
         {
           model: Recipient,
           as: 'recipient',
-          attributes: ['name', 'street', 'number', 'city', 'state'],
+          attributes: ['name', 'street', 'number', 'city', 'state', 'cep'],
         },
       ],
     });
