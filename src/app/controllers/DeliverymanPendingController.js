@@ -1,3 +1,4 @@
+import Properties from '../../config/properties';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
@@ -7,6 +8,9 @@ class DeliverymanPendingController {
   async index(req, res) {
     const { deliverymanId } = req.params;
     const { page = 1 } = req.query;
+
+    // Get properties from app.properties file
+    const limit = Number(Properties.props.get('pagination.limit.result'));
 
     const deliveryman = await Deliveryman.findByPk(deliverymanId);
 
@@ -20,8 +24,8 @@ class DeliverymanPendingController {
         end_date: null,
         canceled_at: null,
       },
-      limit: 20,
-      offset: (page - 1) * 20,
+      limit,
+      offset: (page - 1) * limit,
       order: ['id'],
       attributes: [
         'id',

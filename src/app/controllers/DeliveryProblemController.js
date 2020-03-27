@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import Properties from '../../config/properties';
 import DeliveryProblem from '../models/DeliveryProblem';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
@@ -8,7 +9,14 @@ import Queue from '../../lib/Queue';
 
 class DeliveryProblemController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
+    // Get properties from app.properties file
+    const limit = Number(Properties.props.get('pagination.limit.result'));
+
     const deliveryPromblens = await DeliveryProblem.findAll({
+      limit,
+      offset: (page - 1) * limit,
       include: [
         {
           model: Delivery,
@@ -37,10 +45,17 @@ class DeliveryProblemController {
   async show(req, res) {
     const { deliveryId: delivery_id } = req.params;
 
+    const { page = 1 } = req.query;
+
+    // Get properties from app.properties file
+    const limit = Number(Properties.props.get('pagination.limit.result'));
+
     const deliveryProblems = await DeliveryProblem.findAll({
       where: {
         delivery_id,
       },
+      limit,
+      offset: (page - 1) * limit,
       include: [
         {
           model: Delivery,

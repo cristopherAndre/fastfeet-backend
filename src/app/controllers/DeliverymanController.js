@@ -1,12 +1,17 @@
 import * as Yup from 'yup';
+import Properties from '../../config/properties';
 import Deliveryman from '../models/Deliveryman';
 
 class DeliverymanController {
   async index(req, res) {
     const { page = 1 } = req.query;
+
+    // Get properties from app.properties file
+    const limit = Number(Properties.props.get('pagination.limit.result'));
+
     const deliverymen = await Deliveryman.findAll({
-      limit: 20,
-      offset: (page - 1) * 20,
+      limit,
+      offset: (page - 1) * limit,
     });
     return res.json(deliverymen);
   }

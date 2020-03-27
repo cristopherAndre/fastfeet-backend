@@ -1,4 +1,5 @@
 import { Op } from 'sequelize';
+import Properties from '../../config/properties';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
@@ -8,6 +9,9 @@ class DeliverymanDeliveredController {
   async index(req, res) {
     const { deliverymanId } = req.params;
     const { page = 1 } = req.query;
+
+    // Get properties from app.properties file
+    const limit = Number(Properties.props.get('pagination.limit.result'));
 
     const deliveryman = await Deliveryman.findByPk(deliverymanId);
 
@@ -21,8 +25,8 @@ class DeliverymanDeliveredController {
         end_date: { [Op.ne]: null },
         canceled_at: { [Op.eq]: null },
       },
-      limit: 20,
-      offset: (page - 1) * 20,
+      limit,
+      offset: (page - 1) * limit,
       order: ['id'],
       attributes: [
         'id',

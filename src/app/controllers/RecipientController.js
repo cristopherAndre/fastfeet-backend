@@ -1,12 +1,17 @@
 import * as Yup from 'yup';
+import Properties from '../../config/properties';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
   async index(req, res) {
     const { page = 1 } = req.query;
+
+    // Get properties from app.properties file
+    const limit = Number(Properties.props.get('pagination.limit.result'));
+
     const recipients = await Recipient.findAll({
-      limit: 20,
-      offset: (page - 1) * 20,
+      limit,
+      offset: (page - 1) * limit,
     });
     return res.json(recipients);
   }
