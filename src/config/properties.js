@@ -1,6 +1,8 @@
 import PropertiesReader from 'properties-reader';
 import { resolve } from 'path';
 
-export default {
-  props: PropertiesReader(resolve(__dirname, '..', '..', 'app.properties')),
-};
+const properties = PropertiesReader(
+  resolve(__dirname, '..', '..', 'app.properties')
+);
+
+export default properties;

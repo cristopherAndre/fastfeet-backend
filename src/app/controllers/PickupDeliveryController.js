@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import { isAfter, isBefore, setHours, startOfDay, endOfDay } from 'date-fns';
-import Properties from '../../config/properties';
+import properties from '../../config/properties';
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
 
@@ -47,8 +47,8 @@ class PickupDeliveryController {
     }
 
     // Get properties from app.properties file
-    const startPickup = Number(Properties.props.get('delivery.start.pickup'));
-    const endPickup = Number(Properties.props.get('delivery.end.pickup'));
+    const startPickup = Number(properties.get('delivery.start.pickup'));
+    const endPickup = Number(properties.get('delivery.end.pickup'));
 
     if (
       isBefore(currentDate, setHours(new Date(), startPickup)) ||

@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import Properties from '../../config/properties';
+import properties from '../../config/properties';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
@@ -7,7 +7,7 @@ class RecipientController {
     const { page = 1 } = req.query;
 
     // Get properties from app.properties file
-    const limit = Number(Properties.props.get('pagination.limit.result'));
+    const limit = Number(properties.get('pagination.limit.result'));
 
     const recipients = await Recipient.findAll({
       limit,
